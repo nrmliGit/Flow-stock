@@ -1,8 +1,10 @@
 "use client";
 
 import { X } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, Suspense, useState } from "react";
 import { addProduct } from "./utils";
+import ProductColors from "./ProductColor";
+import ProductModels from "./ProductModel";
 
 export default function AddProductModal({
   isOpen,
@@ -12,10 +14,12 @@ export default function AddProductModal({
   onClose: Dispatch<SetStateAction<boolean>>;
 }) {
   const [isDisabled, setDisabled] = useState<boolean>(true);
+
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 cursor-default">
       <div className="absolute inset-0 bg-gray-300/50 backdrop-blur-sm"></div>
+
       <div className="relative z-10 flex justify-center items-center h-full">
         <button
           onClick={() => onClose(false)}
@@ -70,14 +74,10 @@ export default function AddProductModal({
             <label className="text-gray-700  p-1">
               Choose a product model:
             </label>
-            <div className="border-2 border-gray-200 mb-4 mt-2 p-2 rounded-md ">
-              <select name="models" id="models">
-                <option value="1">1296</option>
-                <option value="2">5575</option>
-                <option value="3">5175</option>
-                <option value="4">708</option>
-              </select>
-            </div>
+
+            <Suspense fallback={<>loading...</>}>
+              <ProductModels />
+            </Suspense>
 
             <div className="border-2 border-gray-200 mb-4  rounded-md">
               <input
@@ -105,13 +105,10 @@ export default function AddProductModal({
             </div>
 
             <label className="text-gray-700  p-1">Choose a color:</label>
-            <div className="border-2 border-gray-200 mb-4 mt-2 p-2 rounded-md ">
-              <select name="colors" id="colors">
-                <option value="1">BK</option>
-                <option value="2">Golden</option>
-                <option value="3">White</option>
-              </select>
-            </div>
+
+            <Suspense fallback={<>loading...</>}>
+              <ProductColors />
+            </Suspense>
 
             <div className="border-2 border-gray-200 mb-4  rounded-md">
               <input
@@ -133,14 +130,17 @@ export default function AddProductModal({
               Add Product
             </button>
           </form>
-          {/* <label>Choose a color:</label>
-          <select name="colors" id="colors" form="addProductForm">
-            <option value="bk">BK</option>
-            <option value="golden">Golden</option>
-            <option value="white">White</option>
-          </select> */}
         </div>
       </div>
     </div>
   );
+}
+
+{
+  /* <label>Choose a color:</label>
+          <select name="colors" id="colors" form="addProductForm">
+            <option value="bk">BK</option>
+            <option value="golden">Golden</option>
+            <option value="white">White</option>
+          </select> */
 }

@@ -30,25 +30,58 @@ const asideItems = [
 export default function Aside() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   return (
-    <aside className="h-[100dvh]  border-r-2 border-r-gray-300">
-      <div className="pl-[20px] pt-[10px] border-b-2 border-b-gray-300 pb-[15px]">
+    <aside className="h-[100dvh] border-r-2 border-r-gray-200 bg-white">
+      <div className="pl-5 pt-3 border-b-2 border-b-gray-200 pb-4">
         <Link href="/">
-          <img src="/images/logo.png" alt="logo" />
+          <img src="/images/logo.png" alt="logo" className="h-7" />
         </Link>
       </div>
-      <ul className="mx-[25px] mt-[20px]">
+
+      <ul className="mx-5 mt-5 space-y-1">
         {asideItems.map((item, index) => (
           <Link href={item.link} key={index}>
             <li
               onClick={() => setActiveIndex(index)}
-              className={`cursor-pointer rounded-lg p-[15px] text-[14px] flex gap-[10px]  ${
-                activeIndex === index
-                  ? "bg-gray-200 text-gray-900 hover:bg-gray-200"
-                  : "text-gray-500"
-              } hover:bg-gray-100 hover:text-gray-900 transition-colors`}
+              className={`
+                cursor-pointer rounded-lg p-3 text-sm flex gap-3 items-center
+                transition-all duration-200 ease-in-out
+                ${
+                  activeIndex === index
+                    ? "bg-blue-50 text-blue-600 border-r-4 border-r-blue-500" // Aktif öğe stili
+                    : "text-gray-600 hover:bg-blue-50 hover:text-blue-600" // Normal/hover stili
+                }
+                hover:shadow-[inset_0_-1px_0_0_rgba(59,130,246,0.2),inset_0_1px_0_0_rgba(59,130,246,0.1)] 
+                relative overflow-hidden
+                group
+              `}
             >
-              {item.icon}
-              <span>{item.name}</span>
+              {/* Border Efekti (Hover/Active durumunda alt ve sağ kenar) */}
+              <div
+                className={`
+                absolute bottom-0 right-0 w-full h-0.5 bg-blue-400 
+                ${
+                  activeIndex === index
+                    ? "opacity-100"
+                    : "opacity-0 group-hover:opacity-100"
+                }
+                transition-opacity
+              `}
+              />
+              <div
+                className={`
+                absolute top-0 right-0 w-0.5 h-full bg-blue-400 
+                ${
+                  activeIndex === index
+                    ? "opacity-100"
+                    : "opacity-0 group-hover:opacity-100"
+                }
+                transition-opacity
+              `}
+              />
+
+              {/* İkon ve Metin */}
+              <span className="text-lg">{item.icon}</span>
+              <span className="font-medium">{item.name}</span>
             </li>
           </Link>
         ))}

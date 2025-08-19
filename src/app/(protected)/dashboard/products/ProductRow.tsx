@@ -32,61 +32,66 @@ export default function ProductRow({ item }: { item: ProductJoin }) {
   return (
     <tr
       key={item.id}
-      className="even:bg-gray-50 hover:bg-gray-100 transition-colors"
+      className="even:bg-gray-50 hover:bg-gray-100 transition-colors duration-200 border-b border-gray-200"
     >
-      <td className="p-3">{item.size}</td>
-      <td className="p-3 ">
+      <td className="p-3 text-gray-800">{item.size}</td>
+      <td className="p-3 w-[50px] h-[50px]">
         {item.thumbnail ? (
           <img
             src={"http://localhost:5000" + "/" + item.thumbnail}
             alt=""
-            className="w-[50px]"
+            className="w-full h-full object-cover rounded"
           />
         ) : (
-          <div>no image</div>
+          <div className="relative flex items-center justify-center bg-gray-200 rounded-md w-[50px] h-[50px] text-gray-500 text-sm">
+            <span className="whitespace-nowrap">no image</span>
+          </div>
         )}
       </td>
-      <td className="p-3">${item.price}</td>
-      <td className="p-3">{item.blockNumber}</td>
-      <td className="p-3 ">{item.pieceNumber}</td>
-      <td className="p-3">{item.product_color_name}</td>
-      <td className="p-3 cursor-pointer flex items-center justify-center">
+      <td className="p-3 text-green-600 font-medium">{item.price}₼</td>
+      <td className="p-3">
+        <div className="bg-green-100 text-green-700 font-medium rounded-md flex items-center justify-center w-[30px] h-[30px] mx-auto">
+          {item.stock}
+        </div>
+      </td>
+      <td className="p-3 text-gray-800">{item.blockNumber}</td>
+      <td className="p-3 text-gray-800">{item.pieceNumber}</td>
+      <td className="p-3 text-gray-800">{item.product_color_name}</td>
+      <td className="p-3 text-center">
         <div ref={dropdownRef} className="relative inline-block">
           <button
             onClick={() => setIsOpenRow((prev) => !prev)}
-            className="flex  justify-center w-[30px] h-[30px] border-1 border-gray-300 rounded-md cursor-pointer"
+            className="flex justify-center items-center w-[30px] h-[30px] border border-gray-300 rounded-md cursor-pointer hover:bg-gray-200 transition-colors duration-200 mx-auto"
           >
-            ...
+            <span className="text-gray-600 font-bold">...</span>
           </button>
 
           {isOpenRow && (
-            <div className="absolute top-[30px] right-0 bg-white w-[250px]  shadow-lg border border-gray-200 rounded-md px-4 py-2 text-sm z-10">
+            <div className="absolute top-[-45px] right-[170px] transform translate-x-1/2 bg-white w-[250px] shadow-lg border border-gray-300 rounded-md px-3 py-2 text-sm z-10">
               <button
                 onClick={() => setOpenDetailsModal(true)}
-                className="flex gap-2 items-center cursor-pointer py-[7px] px-[5px] w-[100%] rounded-md transition-color duration-200 hover:bg-gray-100"
+                className="flex gap-2 items-center text-blue-600 cursor-pointer py-2 px-2 w-full rounded-md hover:bg-blue-100 transition-colors duration-200"
               >
-                <EyeIcon className="w-[18px]" />
-                <span>Edit Product Details</span>
+                <EyeIcon className="w-4 h-4" />
+                <span className="font-medium">Edit Product Details</span>
               </button>
 
               <button
-                onClick={() => {
-                  softDeleteProduct(item.id);
-                }}
-                className="flex gap-2 items-center cursor-pointer py-[7px] px-[5px] w-[100%] rounded-md transition-color duration-200 hover:bg-red-100"
+                onClick={() => softDeleteProduct(item.id)}
+                className="flex gap-2 items-center text-red-600 cursor-pointer py-2 px-2 w-full rounded-md hover:bg-red-100 transition-colors duration-200 mt-1"
               >
-                <Trash2Icon className="text-red-500 w-[18px] " />
-                <span className="text-red-500">Delete Product</span>
+                <Trash2Icon className="w-4 h-4" />
+                <span className="font-medium">Delete Product</span>
               </button>
             </div>
           )}
-          {
+          {isOpenDetailsModal && (
             <ProductDetailModal
               isOpen={isOpenDetailsModal}
               item={item}
-              onClose={setOpenDetailsModal}
+              onClose={() => setOpenDetailsModal(false)}
             />
-          }
+          )}
         </div>
       </td>
     </tr>

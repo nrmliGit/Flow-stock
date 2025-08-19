@@ -30,51 +30,110 @@ export default function Products({ search }: { search: string }) {
   else {
     return (
       <div className="w-[95%] flex flex-col mx-auto h-full">
-        <div className="flex-grow overflow-y-auto custom-scrollbar flex-shrink-0">
-          <table className="w-full border-2 border-gray-300 ">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="text-left text-gray-700 p-3">Size</th>
-                <th className="text-left text-gray-700 p-3">Thumbnail</th>
-                <th className="text-left text-gray-700 p-3">Price</th>
-                <th className="text-left text-gray-700 p-3">BlockNumber</th>
-                <th className="text-left text-gray-700 p-3">PieceNumber</th>
-                <th className="text-left text-gray-700 p-3">Color</th>
-                <th className=" text-gray-700  py-3">Actions</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {currentItems.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="text-center py-5 text-gray-400">
-                    No results found.
-                  </td>
+        <div className="w-[95%] flex flex-col mx-auto h-full">
+          <div className="flex-grow overflow-y-auto custom-scrollbar flex-shrink-0">
+            <table className="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-white">
+              <thead>
+                <tr className="bg-gray-100 border-b-2 border-gray-300">
+                  <th className="text-left text-gray-700 p-3 font-semibold">
+                    Size
+                  </th>
+                  <th className="text-left text-gray-700 p-3 font-semibold">
+                    Thumbnail
+                  </th>
+                  <th className="text-left text-gray-700 p-3 font-semibold">
+                    Price
+                  </th>
+                  <th className="text-left text-gray-700 p-3 font-semibold">
+                    Stock
+                  </th>
+                  <th className="text-left text-gray-700 p-3 font-semibold">
+                    BlockNumber
+                  </th>
+                  <th className="text-left text-gray-700 p-3 font-semibold">
+                    PieceNumber
+                  </th>
+                  <th className="text-left text-gray-700 p-3 font-semibold">
+                    Color
+                  </th>
+                  <th className="text-gray-700 p-3 font-semibold text-center">
+                    Actions
+                  </th>
                 </tr>
-              ) : (
-                currentItems.map((item) => (
-                  <ProductRow key={item.id} item={item} />
-                ))
-              )}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {currentItems.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="text-center py-5 text-gray-500">
+                      No results found.
+                    </td>
+                  </tr>
+                ) : (
+                  currentItems.map((item) => (
+                    <ProductRow key={item.id} item={item} />
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
         {pageCount > 1 && (
-          <ReactPaginate
-            breakLabel="..."
-            nextLabel=">"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={3}
-            pageCount={pageCount}
-            previousLabel="<"
-            renderOnZeroPageCount={null}
-            containerClassName="flex justify-center items-center space-x-2 mt-4 mb-4 flex-shrink-0 "
-            pageLinkClassName="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-md"
-            previousLinkClassName="py-2 px-3 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-100 hover:text-gray-700"
-            nextLinkClassName="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-100 hover:text-gray-700"
-            activeLinkClassName="z-10 bg-blue-50 border-blue-300 text-blue-600"
-            disabledClassName="opacity-50 cursor-not-allowed"
-          />
+          <div className="flex gap-45 items-center mt-6 mb-4">
+            <div className="flex items-center gap-1 mb-2">
+              <span className="text-sm text-blue-600">
+                Total{" "}
+                <span className="font-medium">{filteredProducts.length}</span>{" "}
+                Products
+              </span>
+              <span className="text-blue-400 mx-1">•</span>
+              <span className="text-sm text-blue-600">
+                <span className="font-medium">{currentPage + 1}</span> /{" "}
+                {pageCount} Page
+              </span>
+            </div>
+
+            <ReactPaginate
+              breakLabel="..."
+              nextLabel=">"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={1}
+              pageCount={pageCount}
+              previousLabel="<"
+              renderOnZeroPageCount={null}
+              containerClassName="flex items-center space-x-1"
+              pageLinkClassName={`
+        py-1.5 px-3.5 text-sm font-medium
+        border border-blue-200 rounded-md
+        text-gray-600 hover:bg-blue-50 hover:text-blue-600
+        transition-colors duration-200
+      `}
+              previousLinkClassName={`
+        py-1.5 px-3.5 text-sm font-medium
+        border border-blue-200 rounded-l-md
+        text-gray-600 hover:bg-blue-50 hover:text-blue-600
+        transition-colors duration-200
+      `}
+              nextLinkClassName={`
+        py-1.5 px-3.5 text-sm font-medium
+        border border-blue-200 rounded-r-md
+        text-gray-600 hover:bg-blue-50 hover:text-blue-600
+        transition-colors duration-200
+      `}
+              activeLinkClassName={`
+        !bg-blue-100 !border-blue-300 
+        !text-blue-700 font-semibold
+      `}
+              breakClassName={`
+        py-1.5 px-3 text-sm text-gray-400
+      `}
+              disabledLinkClassName={`
+        opacity-40 cursor-not-allowed
+        hover:bg-white hover:text-gray-600
+      `}
+            />
+          </div>
         )}
       </div>
     );

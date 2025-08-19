@@ -22,51 +22,70 @@ export default function OrderDetailModal({
       <div className="relative z-10 flex justify-center items-center h-full">
         <button
           onClick={() => onClose(false)}
-          className="bg-red-600 absolute  right-[460px] top-[25px] w-[45px] h-[45px]  place-items-center rounded-md"
+          className="bg-red-600 absolute right-[30%] top-[20%] w-[45px] h-[45px] flex justify-center items-center rounded-md "
         >
           <X />
         </button>
         {item.getProductItems.map((product: GetProductItem) => (
-          <div key={product.id} className="w-[32%]">
-            <div className="bg-white border border-blue-300 py-6 px-5 rounded-md">
-              <div className="flex gap-5 place-items-center mb-4">
-                <span className="whitespace-nowrap">Id:</span>
-                <div className="border-2 border-gray-200 rounded-md w-full">
-                  <div className="p-2 w-full">{product.id}</div>
+          <div key={product.id} className="w-[32%] ">
+            <div className="bg-white border border-blue-300 py-4 px-4 rounded-md">
+              {/* Ortalamayı kaldır, label solda, değer ortada değil */}
+              <div className="flex gap-4 items-center mb-3">
+                <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">
+                  Id:
+                </span>
+                <div className="border border-gray-200 rounded-md flex-1">
+                  <div className="px-2 py-1">{product.id}</div>
                 </div>
               </div>
-              <div className="flex gap-5 place-items-center mb-4">
-                <span className="whitespace-nowrap">Color Name:</span>
-                <div className="border-2 border-gray-200 rounded-md w-full">
-                  <div className="p-2 w-full">{product.colorName}</div>
+
+              <div className="flex gap-4 items-center mb-3">
+                <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">
+                  Color Name:
+                </span>
+                <div className="border border-gray-200 rounded-md flex-1">
+                  <div className="px-2 py-1">{product.colorName}</div>
                 </div>
               </div>
-              <div className="flex gap-5 place-items-center mb-4">
-                <span className="whitespace-nowrap">Size:</span>
-                <div className="border-2 border-gray-200 rounded-md w-full">
-                  <div className="p-2 w-full">{product.size}</div>
+
+              <div className="flex gap-4 items-center mb-3">
+                <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">
+                  Size:
+                </span>
+                <div className="border border-gray-200 rounded-md flex-1">
+                  <div className="px-2 py-1">{product.size}</div>
                 </div>
               </div>
-              <div className="flex gap-5 place-items-center mb-4">
-                <span className="whitespace-nowrap">Thumbnail:</span>
-                <div className="border-2 border-gray-200 rounded-md w-full">
-                  {product.thumbnail ? (
-                    <div className="p-2 w-full">
-                      <img
-                        src={"http://localhost:5000" + "/" + product.thumbnail}
-                        alt=""
-                        className="w-[50px]"
-                      />
-                    </div>
-                  ) : (
-                    <div className="p-2 w-full">no image</div>
-                  )}
+
+              <div className="flex gap-4 items-center mb-3">
+                <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">
+                  Thumbnail:
+                </span>
+                <div className="border border-gray-200 rounded-md flex-1">
+                  <div className="px-2 py-1 flex justify-center">
+                    {product.thumbnail ? (
+                      <div className="w-[50px] h-[50px] bg-gray-100 flex justify-center items-center rounded-md overflow-hidden">
+                        <img
+                          src={`http://localhost:5000/${product.thumbnail}`}
+                          alt=""
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-[50px] h-[50px] bg-gray-200 flex justify-center items-center rounded-md text-gray-500 text-sm">
+                        <span className="whitespace-nowrap">no image</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="flex gap-5 place-items-center mb-4">
-                <span className="whitespace-nowrap">Unit:</span>
-                <div className="border-2 border-gray-200 rounded-md w-full">
-                  <div className="p-2 w-full">{product.unit}</div>
+
+              <div className="flex gap-4 items-center mb-3">
+                <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">
+                  Unit:
+                </span>
+                <div className="border border-gray-200 rounded-md flex-1">
+                  <div className="px-2 py-1">{product.unit}</div>
                 </div>
               </div>
             </div>

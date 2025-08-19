@@ -1,61 +1,47 @@
 "use client";
 
-import { useOrders } from "@/app/contexts/OrderProvider";
 import { useMemo, useState } from "react";
 import ReactPaginate from "react-paginate";
-import OrderRow from "./OrderRow";
+import { useCustomers } from "@/app/contexts/CustomerProvider";
+import CustomerRow from "./CustomerRow";
 
-export default function Orders({ search }: { search: string }) {
-  const { orders, isPending } = useOrders();
-  if (isPending) {
-    return <>Loading...</>;
-  }
+export default function Customers({ search }: { search: string }) {
+  const { customers } = useCustomers();
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 8;
 
-  const filteredOrders = useMemo(() => {
+  const filteredCustomers = useMemo(() => {
     setCurrentPage(0);
     return search
-      ? orders.filter((item) =>
-          item.customerName.toLowerCase().includes(search.toLowerCase())
+      ? customers.filter((item) =>
+          item.name.toLowerCase().includes(search.toLowerCase())
         )
-      : orders;
-  }, [search, orders]);
+      : customers;
+  }, [search, customers]);
 
-  const pageCount = Math.ceil(filteredOrders.length / itemsPerPage);
+  const pageCount = Math.ceil(filteredCustomers.length / itemsPerPage);
   const offset = currentPage * itemsPerPage;
-  const currentItems = filteredOrders.slice(offset, offset + itemsPerPage);
-
-  //console.log(filteredOrders);
+  const currentItems = filteredCustomers.slice(offset, offset + itemsPerPage);
 
   const handlePageClick = (event: { selected: number }) => {
     setCurrentPage(event.selected);
   };
 
-  if (orders.length === 0)
+  if (customers.length === 0)
     return <div className="pl-[25px] pt-[20px]">Loading...</div>;
 
   return (
     <div className="w-[95%] flex flex-col mx-auto h-full">
       <div className="w-[95%] flex flex-col mx-auto h-full">
         <div className="flex-grow overflow-y-auto custom-scrollbar flex-shrink-0">
-          <table className="w-full border border-gray-100 rounded-lg  shadow-md bg-white">
+          <table className="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-white">
             <thead>
               <tr className="bg-gray-100 border-b-2 border-gray-300">
                 <th className="text-left text-gray-700 p-3 font-semibold">
-                  Customer
+                  Customer Name
                 </th>
                 <th className="text-left text-gray-700 p-3 font-semibold">
-                  Status
-                </th>
-                <th className="text-left text-gray-700 p-3 font-semibold">
-                  Price
-                </th>
-                <th className="text-left text-gray-700 p-3 font-semibold">
-                  Unit
-                </th>
-                <th className="text-left text-gray-700 p-3 font-semibold">
-                  Quantity
+                  Phone
                 </th>
                 <th className="text-gray-700 p-3 font-semibold text-center">
                   Actions
@@ -71,19 +57,19 @@ export default function Orders({ search }: { search: string }) {
                 </tr>
               ) : (
                 currentItems.map((item) => (
-                  <OrderRow key={item.id} item={item} />
+                  <CustomerRow key={item.id} item={item} />
                 ))
               )}
             </tbody>
           </table>
         </div>
       </div>
-
       {pageCount > 1 && (
         <div className="flex gap-45 items-center mt-6 mb-4">
           <div className="flex items-center gap-1 mb-2">
             <span className="text-sm text-blue-600">
-              Total <span className="font-medium">{filteredOrders.length}</span>{" "}
+              Total{" "}
+              <span className="font-medium">{filteredCustomers.length}</span>{" "}
               Orders
             </span>
             <span className="text-blue-400 mx-1">•</span>

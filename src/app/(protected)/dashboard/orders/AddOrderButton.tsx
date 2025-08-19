@@ -9,7 +9,7 @@ export default function AddOrderButton({
     <>
       <button
         onClick={() => openModal(true)}
-        className="bg-blue-500 text-white py-2 px-3 rounded-md"
+        className="bg-blue-500 text-white py-[5px] px-3 rounded-md"
       >
         + Add Order
       </button>

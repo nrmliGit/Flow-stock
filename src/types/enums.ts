@@ -1,6 +1,6 @@
 export enum ProductUnit {
-  Box = 0,
-  Block = 1,
+  Box = 1,
+  Block = 2,
 }
 
 export enum OrderStatus {

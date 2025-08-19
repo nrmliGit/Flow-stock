@@ -8,6 +8,8 @@ import AuthProvider from "./contexts/AuthProvider";
 import { getToken } from "./(public)/(auth)/utils";
 import { Toaster } from "react-hot-toast";
 import ProductProvider from "./contexts/ProductProvider";
+import CustomerProvider from "./contexts/CustomerProvider";
+import ReactQueryProvider from "./contexts/ReactQueryProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -34,14 +36,18 @@ export default function RootLayout({
         suppressHydrationWarning
         className={` ${poppins.className} antialiased`}
       >
-        <AuthProvider token={token}>
-          <ProductProvider>
-            <OrderProvider>
-              {children}
-              <Toaster position="top-center" />
-            </OrderProvider>
-          </ProductProvider>
-        </AuthProvider>
+        <ReactQueryProvider>
+          <AuthProvider token={token}>
+            <CustomerProvider>
+              <ProductProvider>
+                <OrderProvider>
+                  {children}
+                  <Toaster position="top-center" />
+                </OrderProvider>
+              </ProductProvider>
+            </CustomerProvider>
+          </AuthProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

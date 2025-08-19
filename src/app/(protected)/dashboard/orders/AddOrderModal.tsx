@@ -2,7 +2,11 @@
 
 import { X } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
-import { addOrder } from "./utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import httpClient from "@/lib/axios";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { ProductItem } from "@/types/product.types";
 
 export default function AddOrderModal({
   isOpen,
@@ -12,6 +16,7 @@ export default function AddOrderModal({
   onClose: Dispatch<SetStateAction<boolean>>;
 }) {
   const [isDisabled, setDisabled] = useState<boolean>(true);
+
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 cursor-default">
@@ -19,14 +24,14 @@ export default function AddOrderModal({
       <div className="relative z-10 flex justify-center items-center h-full">
         <button
           onClick={() => onClose(false)}
-          className="bg-red-600 absolute  right-[460px] top-[25px] w-[45px] h-[45px]  place-items-center rounded-md"
+          className="bg-red-600 absolute  right-[30%] top-[14%] w-[45px] h-[45px]  place-items-center rounded-md"
         >
           <X />
         </button>
         <div className="w-[32%]">
           <form
             onSubmit={(e) => {
-              if (addOrder(e) === "ok") onClose(false);
+              e.preventDefault();
             }}
             className="bg-white border border-blue-300 py-6 px-5 rounded-md"
           >
@@ -36,9 +41,9 @@ export default function AddOrderModal({
                   if (e.target.value.length) setDisabled(false);
                   else setDisabled(true);
                 }}
-                type="number"
-                name="id"
-                placeholder="id"
+                type="text"
+                name="name"
+                placeholder="product name"
                 className="p-2 w-full"
               />
             </div>
@@ -48,14 +53,14 @@ export default function AddOrderModal({
                   if (e.target.value.length) setDisabled(false);
                   else setDisabled(true);
                 }}
-                type="number"
+                type="text"
                 name="customerId"
-                placeholder="customerId"
+                placeholder="customer name"
                 className="p-2 w-full"
               />
             </div>
 
-            <div className="border-2 border-gray-200 mb-4  rounded-md">
+            {/* <div className="border-2 border-gray-200 mb-4  rounded-md">
               <input
                 onChange={(e) => {
                   if (e.target.value.length) setDisabled(false);
@@ -67,17 +72,14 @@ export default function AddOrderModal({
                 className="p-2 w-full"
               />
             </div>
-            <div className="border-2 border-gray-200 mb-4  rounded-md">
-              <input
-                onChange={(e) => {
-                  if (e.target.value.length) setDisabled(false);
-                  else setDisabled(true);
-                }}
-                type="number"
-                name="unit"
-                placeholder="unit"
-                className="p-2 w-full"
-              />
+            <label className="text-gray-700  p-1">Choose a product unit:</label>
+            <div className="border-2 border-gray-200 mb-4 mt-2 p-2 rounded-md ">
+              {
+                <select name="models" id="models">
+                  <option value="0">Block</option>
+                  <option value="1">Box</option>
+                </select>
+              }
             </div>
 
             <div className="border-2 border-gray-200 mb-4  rounded-md">
@@ -91,7 +93,7 @@ export default function AddOrderModal({
                 placeholder="quantity"
                 className="p-2 w-full"
               />
-            </div>
+            </div> */}
             <button
               disabled={isDisabled}
               type="submit"
