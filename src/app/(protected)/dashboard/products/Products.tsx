@@ -79,7 +79,7 @@ export default function Products({ search }: { search: string }) {
           </div>
         </div>
         {pageCount > 1 && (
-          <div className="flex gap-45 items-center mt-6 mb-4">
+          <div className="flex gap-45 items-center justify-center mt-6 mb-4">
             <div className="flex items-center gap-1 mb-2">
               <span className="text-sm text-blue-600">
                 Total{" "}

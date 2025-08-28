@@ -52,24 +52,6 @@ export default function OrderRow({ item }: { item: GetOrder }) {
         )}
       </td>
 
-      {item.getProductItems.map((product: GetProductItem) => (
-        <Fragment key={product.id}>
-          <td className="p-3  text-gray-800">
-            <div className=" w-[30px] text-right">{product.price}₼</div>
-          </td>
-          <td className="p-3 text-gray-800">
-            <span className=" px-2 py-1 ">
-              {product.unit === 1 ? "Box" : "Block"}
-            </span>
-          </td>
-          <td className="p-3 text-gray-800">
-            <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md inline-block min-w-[30px] text-center">
-              {product.quantity}
-            </span>
-          </td>
-        </Fragment>
-      ))}
-
       <td className="p-3 text-center">
         <div ref={dropdownRef} className="relative inline-block">
           <button

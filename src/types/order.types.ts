@@ -12,3 +12,10 @@ export type AddOrder = {
   customerId: number;
   productItems: Array<ProductItem>;
 };
+
+export type OrderProductType = {
+  id: number;
+  unit: number;
+  price: number;
+  quantity: number;
+};

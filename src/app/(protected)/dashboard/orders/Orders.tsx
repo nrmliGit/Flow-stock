@@ -26,8 +26,6 @@ export default function Orders({ search }: { search: string }) {
   const offset = currentPage * itemsPerPage;
   const currentItems = filteredOrders.slice(offset, offset + itemsPerPage);
 
-  //console.log(filteredOrders);
-
   const handlePageClick = (event: { selected: number }) => {
     setCurrentPage(event.selected);
   };
@@ -48,15 +46,7 @@ export default function Orders({ search }: { search: string }) {
                 <th className="text-left text-gray-700 p-3 font-semibold">
                   Status
                 </th>
-                <th className="text-left text-gray-700 p-3 font-semibold">
-                  Price
-                </th>
-                <th className="text-left text-gray-700 p-3 font-semibold">
-                  Unit
-                </th>
-                <th className="text-left text-gray-700 p-3 font-semibold">
-                  Quantity
-                </th>
+
                 <th className="text-gray-700 p-3 font-semibold text-center">
                   Actions
                 </th>
@@ -80,7 +70,7 @@ export default function Orders({ search }: { search: string }) {
       </div>
 
       {pageCount > 1 && (
-        <div className="flex gap-45 items-center mt-6 mb-4">
+        <div className="flex gap-45 justify-center items-center mt-6 mb-4">
           <div className="flex items-center gap-1 mb-2">
             <span className="text-sm text-blue-600">
               Total <span className="font-medium">{filteredOrders.length}</span>{" "}

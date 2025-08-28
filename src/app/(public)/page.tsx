@@ -9,10 +9,16 @@ export default function HomeHeader() {
         </Link>
       </div>
       <div className="flex gap-2">
-        <Link href="/login" className="text-blue-500  ">
+        <Link
+          href="/login"
+          className="text-blue-500 h-full flex items-center justify-center"
+        >
           Login
         </Link>
-        <Link href="/register" className="text-blue-500">
+        <Link
+          href="/register"
+          className="text-blue-500 h-full flex items-center justify-centers"
+        >
           Register
         </Link>
       </div>

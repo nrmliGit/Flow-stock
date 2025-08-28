@@ -2,11 +2,13 @@
 
 import { X } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
+import SearchProduct from "./SearchProduct";
+import SearchCustomer from "./SearchCustomer";
+import { ProductJoin } from "@/types/product.types";
+import { GetCustomer } from "@/types/customer.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import httpClient from "@/lib/axios";
-import toast from "react-hot-toast";
-import axios from "axios";
-import { ProductItem } from "@/types/product.types";
+import { OrderProductType } from "@/types/order.types";
 
 export default function AddOrderModal({
   isOpen,
@@ -16,6 +18,43 @@ export default function AddOrderModal({
   onClose: Dispatch<SetStateAction<boolean>>;
 }) {
   const [isDisabled, setDisabled] = useState<boolean>(true);
+  const [selectedProducts, setSelectedProducts] = useState<
+    Array<ProductJoin & Omit<OrderProductType, "id">>
+  >([]);
+  const [selectedCustomer, setSelectedCustomer] = useState<GetCustomer | null>(
+    null
+  );
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      if (selectedProducts.length === 0 && !selectedCustomer) return;
+
+      const response = await httpClient.post(
+        "http://localhost:5000/api/orders/add",
+        {
+          customerId: selectedCustomer?.id,
+          productItems: selectedProducts.map((p) => ({
+            id: p.id,
+            quantity: 1,
+            price: p.price,
+            unit: 2,
+          })),
+        }
+      );
+
+      if (response.status === 201) {
+        setSelectedProducts([]);
+        setSelectedCustomer(null);
+        onClose(false);
+      }
+    },
+    onSuccess: async () =>
+      await queryClient.invalidateQueries({
+        queryKey: ["orders"],
+      }),
+  });
 
   if (!isOpen) return null;
   return (
@@ -28,78 +67,30 @@ export default function AddOrderModal({
         >
           <X />
         </button>
-        <div className="w-[32%]">
+        <div className="w-[40%]">
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              mutate();
             }}
             className="bg-white border border-blue-300 py-6 px-5 rounded-md"
           >
-            <div className="border-2 border-gray-200 mb-4  rounded-md">
-              <input
-                onChange={(e) => {
-                  if (e.target.value.length) setDisabled(false);
-                  else setDisabled(true);
-                }}
-                type="text"
-                name="name"
-                placeholder="product name"
-                className="p-2 w-full"
-              />
-            </div>
-            <div className="border-2 border-gray-200 mb-4  rounded-md">
-              <input
-                onChange={(e) => {
-                  if (e.target.value.length) setDisabled(false);
-                  else setDisabled(true);
-                }}
-                type="text"
-                name="customerId"
-                placeholder="customer name"
-                className="p-2 w-full"
-              />
-            </div>
-
-            {/* <div className="border-2 border-gray-200 mb-4  rounded-md">
-              <input
-                onChange={(e) => {
-                  if (e.target.value.length) setDisabled(false);
-                  else setDisabled(true);
-                }}
-                type="number"
-                name="price"
-                placeholder="price"
-                className="p-2 w-full"
-              />
-            </div>
-            <label className="text-gray-700  p-1">Choose a product unit:</label>
-            <div className="border-2 border-gray-200 mb-4 mt-2 p-2 rounded-md ">
-              {
-                <select name="models" id="models">
-                  <option value="0">Block</option>
-                  <option value="1">Box</option>
-                </select>
-              }
-            </div>
-
-            <div className="border-2 border-gray-200 mb-4  rounded-md">
-              <input
-                onChange={(e) => {
-                  if (e.target.value.length) setDisabled(false);
-                  else setDisabled(true);
-                }}
-                type="number"
-                name="quantity"
-                placeholder="quantity"
-                className="p-2 w-full"
-              />
-            </div> */}
+            <SearchProduct
+              selectedProducts={selectedProducts}
+              setSelectedProducts={setSelectedProducts}
+              setDisabled={setDisabled}
+            />
+            <SearchCustomer
+              selectedCustomer={selectedCustomer}
+              setSelectedCustomer={setSelectedCustomer}
+              setDisabled={setDisabled}
+            />
             <button
               disabled={isDisabled}
               type="submit"
               className="bg-blue-500 text-white p-2 w-full  disabled:opacity-50 disabled:cursor-default disabled:pointer-events-none  rounded-md"
             >
-              Add Order
+              {isPending ? "Processing..." : "Add Order"}
             </button>
           </form>
         </div>

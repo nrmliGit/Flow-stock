@@ -19,23 +19,63 @@ export default function OrderDetailModal({
   return (
     <div className="fixed inset-0 z-50 cursor-default">
       <div className="absolute inset-0 bg-gray-300/50 backdrop-blur-sm"></div>
-      <div className="relative z-10 flex justify-center items-center h-full">
+
+      <div className="relative z-10 flex justify-center items-center h-full overflow-y-auto overflow-x-hidden p-6">
         <button
           onClick={() => onClose(false)}
-          className="bg-red-600 absolute right-[30%] top-[20%] w-[45px] h-[45px] flex justify-center items-center rounded-md "
+          className="bg-red-600 fixed right-[2%] top-[3%] w-[45px] h-[45px] flex justify-center items-center rounded-md"
         >
           <X />
         </button>
-        {item.getProductItems.map((product: GetProductItem) => (
-          <div key={product.id} className="w-[32%] ">
-            <div className="bg-white border border-blue-300 py-4 px-4 rounded-md">
-              {/* Ortalamayı kaldır, label solda, değer ortada değil */}
+
+        <div
+          className="
+        grid gap-4 px-4 
+        grid-cols-[repeat(auto-fit,minmax(300px,1fr))] 
+        justify-items-center
+        w-full max-w-[1400px] mx-auto
+      "
+        >
+          {item.getProductItems.map((product: GetProductItem) => (
+            <div
+              key={product.id}
+              className="bg-white border border-blue-300 py-4 px-4 rounded-md shadow-md w-full max-w-[320px]"
+            >
               <div className="flex gap-4 items-center mb-3">
                 <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">
                   Id:
                 </span>
                 <div className="border border-gray-200 rounded-md flex-1">
                   <div className="px-2 py-1">{product.id}</div>
+                </div>
+              </div>
+
+              <div className="flex gap-4 items-center mb-3">
+                <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">
+                  Price:
+                </span>
+                <div className="border border-gray-200 rounded-md flex-1">
+                  <div className="px-2 py-1">{product.price}</div>
+                </div>
+              </div>
+
+              <div className="flex gap-4 items-center mb-3">
+                <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">
+                  Unit:
+                </span>
+                <div className="border border-gray-200 rounded-md flex-1">
+                  <div className="px-2 py-1">
+                    {product.unit === 1 ? "Box" : "Block"}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-4 items-center mb-3">
+                <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">
+                  Quantity:
+                </span>
+                <div className="border border-gray-200 rounded-md flex-1">
+                  <div className="px-2 py-1">{product.quantity}</div>
                 </div>
               </div>
 
@@ -79,18 +119,9 @@ export default function OrderDetailModal({
                   </div>
                 </div>
               </div>
-
-              <div className="flex gap-4 items-center mb-3">
-                <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">
-                  Unit:
-                </span>
-                <div className="border border-gray-200 rounded-md flex-1">
-                  <div className="px-2 py-1">{product.unit}</div>
-                </div>
-              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
