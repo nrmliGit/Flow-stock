@@ -1,9 +1,10 @@
+import { GetCustomer } from "./customer.types";
 import { OrderStatus } from "./enums";
 import { GetProductItem, ProductItem } from "./product.types";
 
 export type GetOrder = {
   id: number;
-  customerName: string;
+  customer: GetCustomer;
   status: OrderStatus;
   getProductItems: Array<GetProductItem>;
 };

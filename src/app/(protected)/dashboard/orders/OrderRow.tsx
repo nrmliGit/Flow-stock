@@ -7,6 +7,7 @@ import { CheckIcon, EyeIcon, Trash2Icon } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import OrderDetailModal from "./OrderDetailModal";
 import { completeOrder } from "./utils";
+import { GetCustomer } from "@/types/customer.types";
 
 export default function OrderRow({ item }: { item: GetOrder }) {
   const [isOpenDetailsModal, setOpenDetailsModal] = useState(false);
@@ -31,13 +32,18 @@ export default function OrderRow({ item }: { item: GetOrder }) {
     };
   }, [isOpen]);
 
-  //console.log(item);
+  console.log(item);
 
   return (
     <tr className="even:bg-gray-50 hover:bg-gray-100 transition-colors duration-200 border-b border-gray-200">
       <td className="p-3">
         <span className="truncate block max-w-[150px] text-gray-800 font-medium">
-          {item.customerName}
+          {item.customer.name}
+        </span>
+      </td>
+      <td className="p-3">
+        <span className="truncate block max-w-[150px] text-gray-800 font-medium">
+          {item.customer.phone}
         </span>
       </td>
       <td className="p-3 capitalize">

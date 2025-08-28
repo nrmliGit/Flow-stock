@@ -20,7 +20,7 @@ export default function OrderDetailModal({
     <div className="fixed inset-0 z-50 cursor-default">
       <div className="absolute inset-0 bg-gray-300/50 backdrop-blur-sm"></div>
 
-      <div className="relative z-10 flex justify-center items-center h-full overflow-y-auto overflow-x-hidden p-6">
+      <div className="relative z-10 flex justify-items-center h-full  overflow-x-hidden p-6">
         <button
           onClick={() => onClose(false)}
           className="bg-red-600 fixed right-[2%] top-[3%] w-[45px] h-[45px] flex justify-center items-center rounded-md"
@@ -30,16 +30,16 @@ export default function OrderDetailModal({
 
         <div
           className="
-        grid gap-4 px-4 
-        grid-cols-[repeat(auto-fit,minmax(300px,1fr))] 
-        justify-items-center
-        w-full max-w-[1400px] mx-auto
+          flex
+          flex-col
+        items-center
+        w-full  mx-auto
       "
         >
           {item.getProductItems.map((product: GetProductItem) => (
             <div
               key={product.id}
-              className="bg-white border border-blue-300 py-4 px-4 rounded-md shadow-md w-full max-w-[320px]"
+              className="bg-white border border-blue-300 py-4 px-4 rounded-md mb-[20px] shadow-md w-full max-w-[320px]"
             >
               <div className="flex gap-4 items-center mb-3">
                 <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">

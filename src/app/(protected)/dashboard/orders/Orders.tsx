@@ -17,7 +17,7 @@ export default function Orders({ search }: { search: string }) {
     setCurrentPage(0);
     return search
       ? orders.filter((item) =>
-          item.customerName.toLowerCase().includes(search.toLowerCase())
+          item.customer.name.toLowerCase().includes(search.toLowerCase())
         )
       : orders;
   }, [search, orders]);
@@ -42,6 +42,9 @@ export default function Orders({ search }: { search: string }) {
               <tr className="bg-gray-100 border-b-2 border-gray-300">
                 <th className="text-left text-gray-700 p-3 font-semibold">
                   Customer
+                </th>
+                <th className="text-left text-gray-700 p-3 font-semibold">
+                  Phone
                 </th>
                 <th className="text-left text-gray-700 p-3 font-semibold">
                   Status
