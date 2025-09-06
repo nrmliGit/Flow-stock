@@ -43,10 +43,10 @@ export default function OrderDetailModal({
             >
               <div className="flex gap-4 items-center mb-3">
                 <span className="whitespace-nowrap w-[110px] font-medium text-gray-700">
-                  Id:
+                  Model Name:
                 </span>
                 <div className="border border-gray-200 rounded-md flex-1">
-                  <div className="px-2 py-1">{product.id}</div>
+                  <div className="px-2 py-1">{product.modelName}</div>
                 </div>
               </div>
 

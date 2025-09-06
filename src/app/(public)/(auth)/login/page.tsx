@@ -2,9 +2,7 @@
 import { useActionState, useLayoutEffect } from "react";
 import { login } from "./actions";
 import Link from "next/link";
-import { RegisterResult } from "@/types/auth.types";
 import toast from "react-hot-toast";
-import { isNull } from "util";
 
 export default function Login() {
   const [state, action, loading] = useActionState(login, "");

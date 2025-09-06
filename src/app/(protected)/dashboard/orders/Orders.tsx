@@ -30,8 +30,7 @@ export default function Orders({ search }: { search: string }) {
     setCurrentPage(event.selected);
   };
 
-  if (orders.length === 0)
-    return <div className="pl-[25px] pt-[20px]">Loading...</div>;
+  if (orders.length === 0) return <div>Loading...</div>;
 
   return (
     <div className="w-[95%] flex flex-col mx-auto h-full">

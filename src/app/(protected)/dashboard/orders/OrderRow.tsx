@@ -32,8 +32,6 @@ export default function OrderRow({ item }: { item: GetOrder }) {
     };
   }, [isOpen]);
 
-  console.log(item);
-
   return (
     <tr className="even:bg-gray-50 hover:bg-gray-100 transition-colors duration-200 border-b border-gray-200">
       <td className="p-3">
@@ -75,21 +73,24 @@ export default function OrderRow({ item }: { item: GetOrder }) {
                 <EyeIcon className="w-4 h-4" />
                 <span className="font-medium">View Order Details</span>
               </button>
-              <button
-                onClick={() => remove(item.id)}
-                className="flex gap-2 items-center text-red-600 cursor-pointer py-2 px-2 w-full rounded-md hover:bg-red-100 transition-colors duration-200 mt-1"
-              >
-                <Trash2Icon className="w-4 h-4" />
-                <span className="font-medium">Delete Order</span>
-              </button>
+
               {item.status === 0 && (
-                <button
-                  onClick={() => completeOrder(item.id)}
-                  className="flex gap-2 items-center text-green-600 cursor-pointer py-2 px-2 w-full rounded-md hover:bg-green-100 transition-colors duration-200 mt-1"
-                >
-                  <CheckIcon className="w-4 h-4" />
-                  <span className="font-medium">Complete Order</span>
-                </button>
+                <>
+                  <button
+                    onClick={() => remove(item.id)}
+                    className="flex gap-2 items-center text-red-600 cursor-pointer py-2 px-2 w-full rounded-md hover:bg-red-100 transition-colors duration-200 mt-1"
+                  >
+                    <Trash2Icon className="w-4 h-4" />
+                    <span className="font-medium">Delete Order</span>
+                  </button>
+                  <button
+                    onClick={() => completeOrder(item.id)}
+                    className="flex gap-2 items-center text-green-600 cursor-pointer py-2 px-2 w-full rounded-md hover:bg-green-100 transition-colors duration-200 mt-1"
+                  >
+                    <CheckIcon className="w-4 h-4" />
+                    <span className="font-medium">Complete Order</span>
+                  </button>
+                </>
               )}
             </div>
           )}

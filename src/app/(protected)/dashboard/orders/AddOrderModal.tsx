@@ -9,6 +9,8 @@ import { GetCustomer } from "@/types/customer.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import httpClient from "@/lib/axios";
 import { OrderProductType } from "@/types/order.types";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function AddOrderModal({
   isOpen,
@@ -31,9 +33,8 @@ export default function AddOrderModal({
     mutationFn: async () => {
       if (selectedProducts.length === 0 && !selectedCustomer) return;
 
-      const response = await httpClient.post(
-        "http://localhost:5000/api/orders/add",
-        {
+      const response = await httpClient
+        .post("http://localhost:5000/api/orders/add", {
           customerId: selectedCustomer?.id,
           productItems: selectedProducts.map((p) => ({
             id: p.id,
@@ -41,14 +42,22 @@ export default function AddOrderModal({
             price: p.price,
             unit: 2,
           })),
-        }
-      );
-
-      if (response.status === 201) {
-        setSelectedProducts([]);
-        setSelectedCustomer(null);
-        onClose(false);
-      }
+        })
+        .then((res) => {
+          if (res.status === 201) {
+            setSelectedProducts([]);
+            setSelectedCustomer(null);
+            onClose(false);
+            toast.success("Order added Successfully");
+          }
+        })
+        .catch((e) => {
+          if (axios.isAxiosError(e)) toast.error(e.response?.data);
+          else {
+            toast.error("Something went wrong");
+            console.error("Unknown Error:", e);
+          }
+        });
     },
     onSuccess: async () =>
       await queryClient.invalidateQueries({

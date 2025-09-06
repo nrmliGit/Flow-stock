@@ -70,7 +70,6 @@ export function updateProduct(
         : formEvent.currentTarget.stock.placeholder,
   };
 
-  //console.log(obj);
   httpClient
     .patch("/api/product/update/", obj)
     .then((res) => {
