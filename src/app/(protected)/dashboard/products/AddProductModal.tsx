@@ -5,6 +5,8 @@ import { Dispatch, SetStateAction, Suspense, useState } from "react";
 import { addProduct } from "./utils";
 import ProductColors from "./ProductColor";
 import ProductModels from "./ProductModel";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export default function AddProductModal({
   isOpen,
@@ -15,6 +17,16 @@ export default function AddProductModal({
 }) {
   const [isDisabled, setDisabled] = useState<boolean>(true);
 
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: addProduct,
+    onSuccess: () => {
+      toast.success("Product added successfully");
+      queryClient.invalidateQueries({ queryKey: ["product"] });
+      onClose(false);
+    },
+  });
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 cursor-default">
@@ -23,14 +35,16 @@ export default function AddProductModal({
       <div className="relative z-10 flex justify-center items-center h-full">
         <button
           onClick={() => onClose(false)}
-          className="bg-red-600 absolute  right-[460px] top-[25px] w-[45px] h-[45px]  place-items-center rounded-md"
+          className="bg-red-600 absolute  right-[350px] top-[25px] w-[45px] h-[45px]  place-items-center rounded-md"
         >
           <X />
         </button>
         <div className="w-[32%]">
           <form
             onSubmit={(e) => {
-              if (addProduct(e) === "ok") onClose(false);
+              // if (addProduct(e) === "ok") onClose(false);
+              e.preventDefault();
+              mutate(e);
             }}
             className="bg-white border border-blue-300 py-6 px-5 rounded-md"
           >
@@ -123,24 +137,15 @@ export default function AddProductModal({
               />
             </div>
             <button
-              disabled={isDisabled}
+              disabled={isDisabled || isPending}
               type="submit"
               className="bg-blue-500 text-white p-2 w-full  disabled:opacity-50 disabled:cursor-default disabled:pointer-events-none  rounded-md"
             >
-              Add Product
+              {isPending ? "Adding..." : "Add Product"}
             </button>
           </form>
         </div>
       </div>
     </div>
   );
-}
-
-{
-  /* <label>Choose a color:</label>
-          <select name="colors" id="colors" form="addProductForm">
-            <option value="bk">BK</option>
-            <option value="golden">Golden</option>
-            <option value="white">White</option>
-          </select> */
 }

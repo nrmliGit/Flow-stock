@@ -1,7 +1,4 @@
 import httpClient from "@/lib/axios";
-import axios from "axios";
-import { FormEvent } from "react";
-import toast from "react-hot-toast";
 
 // export function addOrder(formEvent: FormEvent<HTMLFormElement>) {
 //   formEvent.preventDefault();
@@ -33,6 +30,7 @@ import toast from "react-hot-toast";
 //   return "ok";
 // }
 
-export function completeOrder(id: number) {
-  const response = httpClient.patch(`/api/orders/${id}/complete`);
+export async function completeOrder(id: number) {
+  const res = await httpClient.patch(`/api/orders/${id}/complete`);
+  return res.data;
 }

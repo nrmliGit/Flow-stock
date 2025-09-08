@@ -6,7 +6,10 @@ import { useCustomers } from "@/app/contexts/CustomerProvider";
 import CustomerRow from "./CustomerRow";
 
 export default function Customers({ search }: { search: string }) {
-  const { customers } = useCustomers();
+  const { customers, isPending } = useCustomers();
+  if (isPending) {
+    return <>Loading...</>;
+  }
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 8;
 
@@ -27,8 +30,7 @@ export default function Customers({ search }: { search: string }) {
     setCurrentPage(event.selected);
   };
 
-  if (customers.length === 0)
-    return <div className="pl-[25px] pt-[20px]">Loading...</div>;
+  if (customers.length === 0) return <div>Loading...</div>;
 
   return (
     <div className="w-[95%] flex flex-col mx-auto h-full">

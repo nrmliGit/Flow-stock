@@ -12,7 +12,6 @@ export default function ProductColors() {
     },
   });
 
-  // console.log(colors);
   return (
     <div className="border-2 border-gray-200 mb-4 mt-2 p-2 rounded-md ">
       <select name="colors" id="colors">

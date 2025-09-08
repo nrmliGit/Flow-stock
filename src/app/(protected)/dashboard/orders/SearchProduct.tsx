@@ -133,7 +133,7 @@ export default function SearchProduct({
                   >
                     <div className="flex-1 grid grid-cols-[3fr_2fr] ">
                       <div className="grow ">
-                        <p className="mb-2 ">
+                        <p className="mb-2">
                           <span className="text-[14px] text-gray-600">
                             {" "}
                             Name:
@@ -142,12 +142,20 @@ export default function SearchProduct({
                             {p.size}-{p.product_model_name}
                           </span>
                         </p>
-                        <p>
+                        <p className="mb-2">
                           <span className="text-[14px] text-gray-600">
                             Color:
                           </span>{" "}
                           <span className="font-medium text-[16px]">
                             {p.product_color_name}
+                          </span>
+                        </p>
+                        <p>
+                          <span className="text-[14px] text-gray-600">
+                            Stock:
+                          </span>{" "}
+                          <span className="font-medium text-[16px]">
+                            {p.stock}
                           </span>
                         </p>
                       </div>
@@ -167,8 +175,8 @@ export default function SearchProduct({
                               };
                             }}
                           >
-                            <option value="1">Box</option>
-                            <option value="2">Block</option>
+                            <option value="1">Block</option>
+                            <option value="2">Box</option>
                           </select>
                         </div>
                         <div className="flex gap-x-2">
@@ -208,6 +216,7 @@ export default function SearchProduct({
                     </div>
                     <div>
                       <button
+                        type="button"
                         className="[&>svg]:w-5 [&>svg]:h-5 border-2 border-gray-200 h-full px-1 rounded-sm "
                         onClick={() => {
                           handleSelectedProduct({

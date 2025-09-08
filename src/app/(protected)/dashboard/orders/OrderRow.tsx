@@ -2,18 +2,42 @@
 
 import { useOrders } from "@/app/contexts/OrderProvider";
 import { GetOrder } from "@/types/order.types";
-import { GetProductItem } from "@/types/product.types";
 import { CheckIcon, EyeIcon, Trash2Icon } from "lucide-react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import OrderDetailModal from "./OrderDetailModal";
 import { completeOrder } from "./utils";
-import { GetCustomer } from "@/types/customer.types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export default function OrderRow({ item }: { item: GetOrder }) {
   const [isOpenDetailsModal, setOpenDetailsModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const { remove } = useOrders();
+
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => remove(id),
+    onSuccess: () => {
+      toast.success("Order deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+    onError: () => {
+      toast.error("Failed to delete order");
+    },
+  });
+
+  const completeMutation = useMutation({
+    mutationFn: (id: number) => completeOrder(id),
+    onSuccess: () => {
+      toast.success("Order completed successfully");
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+    onError: () => {
+      toast.error("Failed to complete order");
+    },
+  });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -77,18 +101,26 @@ export default function OrderRow({ item }: { item: GetOrder }) {
               {item.status === 0 && (
                 <>
                   <button
-                    onClick={() => remove(item.id)}
+                    onClick={() => deleteMutation.mutate(item.id)}
+                    disabled={deleteMutation.isPending}
                     className="flex gap-2 items-center text-red-600 cursor-pointer py-2 px-2 w-full rounded-md hover:bg-red-100 transition-colors duration-200 mt-1"
                   >
                     <Trash2Icon className="w-4 h-4" />
-                    <span className="font-medium">Delete Order</span>
+                    <span className="font-medium">
+                      {deleteMutation.isPending ? "Deleting" : "  Delete Order"}
+                    </span>
                   </button>
                   <button
-                    onClick={() => completeOrder(item.id)}
+                    onClick={() => completeMutation.mutate(item.id)}
+                    disabled={completeMutation.isPending}
                     className="flex gap-2 items-center text-green-600 cursor-pointer py-2 px-2 w-full rounded-md hover:bg-green-100 transition-colors duration-200 mt-1"
                   >
                     <CheckIcon className="w-4 h-4" />
-                    <span className="font-medium">Complete Order</span>
+                    <span className="font-medium">
+                      {completeMutation.isPending
+                        ? "Completing"
+                        : " Complete Order"}
+                    </span>
                   </button>
                 </>
               )}

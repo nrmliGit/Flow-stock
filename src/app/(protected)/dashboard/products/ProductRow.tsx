@@ -6,11 +6,27 @@ import { useEffect, useRef, useState } from "react";
 
 import { softDeleteProduct } from "./utils";
 import ProductDetailModal from "./ProductDetailModal";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export default function ProductRow({ item }: { item: ProductJoin }) {
   const [isOpenRow, setIsOpenRow] = useState(false);
   const [isOpenDetailsModal, setOpenDetailsModal] = useState(false);
+
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => softDeleteProduct(id),
+    onSuccess: () => {
+      toast.success("Product deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["product"] });
+    },
+    onError: () => {
+      toast.error("Failed to delete product");
+    },
+  });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -77,11 +93,14 @@ export default function ProductRow({ item }: { item: ProductJoin }) {
               </button>
 
               <button
-                onClick={() => softDeleteProduct(item.id)}
+                onClick={() => deleteMutation.mutate(item.id)}
+                disabled={deleteMutation.isPending}
                 className="flex gap-2 items-center text-red-600 cursor-pointer py-2 px-2 w-full rounded-md hover:bg-red-100 transition-colors duration-200 mt-1"
               >
                 <Trash2Icon className="w-4 h-4" />
-                <span className="font-medium">Delete Product</span>
+                <span className="font-medium">
+                  {deleteMutation.isPending ? "Deleting" : "  Delete Product"}
+                </span>
               </button>
             </div>
           )}

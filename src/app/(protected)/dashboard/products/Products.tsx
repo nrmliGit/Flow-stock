@@ -5,9 +5,13 @@ import ProductRow from "./ProductRow";
 import { useProduct } from "@/app/contexts/ProductProvider";
 
 export default function Products({ search }: { search: string }) {
+  const { products, isPending } = useProduct();
+  if (isPending) {
+    return <>Loading...</>;
+  }
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 6;
-  const { products } = useProduct();
+
   const filteredProducts = useMemo(() => {
     setCurrentPage(0);
     return search

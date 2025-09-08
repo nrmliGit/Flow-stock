@@ -2,49 +2,60 @@
 
 import httpClient from "@/lib/axios";
 import { GetCustomer } from "@/types/customer.types";
-import {
-  createContext,
-  PropsWithChildren,
-  use,
-  useEffect,
-  useState,
-} from "react";
+import { useQuery } from "@tanstack/react-query";
+import { createContext, PropsWithChildren, use, useState } from "react";
 
 type CustomersState = {
   customers: Array<GetCustomer>;
-  remove: (id: number) => void;
+  remove: (id: number) => Promise<any>;
+  isPending: boolean;
 };
 
 const CustomersContext = createContext<CustomersState>({
   customers: [],
-  remove: () => {},
+  remove: async () => {},
+  isPending: false,
 });
 
 export default function CustomerProvider({ children }: PropsWithChildren) {
   const [customers, setCustomers] = useState<Array<GetCustomer>>([]);
 
-  useEffect(() => {
-    const loadCustomers = async () => {
+  // useEffect(() => {
+  //   const loadCustomers = async () => {
+  //     try {
+  //       const res = await httpClient.get("/api/customers");
+  //       setCustomers(res.data);
+  //     } catch (error) {
+  //       console.log("Failed to load customers:", error);
+  //     }
+  //   };
+
+  //   loadCustomers();
+  // }, []);
+
+  const { data: customersData, isPending } = useQuery({
+    queryKey: ["customers"],
+    queryFn: async () => {
       try {
         const res = await httpClient.get("/api/customers");
-        setCustomers(res.data);
+        return res.data;
       } catch (error) {
         console.log("Failed to load customers:", error);
       }
-    };
+    },
+  });
 
-    loadCustomers();
-  }, []);
-
-  function softDeleteCustomer(id: number) {
-    const response = httpClient.delete(`/api/customers/delete/${id}`);
+  async function softDeleteCustomer(id: number) {
+    const res = await httpClient.delete(`/api/customers/delete/${id}`);
+    return res.data;
   }
 
   return (
     <CustomersContext
       value={{
-        customers: customers,
+        customers: customersData,
         remove: softDeleteCustomer,
+        isPending,
       }}
     >
       {children}

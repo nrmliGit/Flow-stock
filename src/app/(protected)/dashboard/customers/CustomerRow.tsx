@@ -2,13 +2,28 @@
 
 import { useCustomers } from "@/app/contexts/CustomerProvider";
 import { GetCustomer } from "@/types/customer.types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash2Icon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function CustomerRow({ item }: { item: GetCustomer }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const { remove } = useCustomers();
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (id: number) => remove(id),
+    onSuccess: () => {
+      toast.success("Customer deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["customers"] });
+    },
+    onError: () => {
+      toast.error("Failed to delete customer");
+    },
+  });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -50,12 +65,13 @@ export default function CustomerRow({ item }: { item: GetCustomer }) {
           {isOpen && (
             <div className="absolute top-[-45px] right-[170px] transform translate-x-1/2 bg-white w-[250px] shadow-lg border border-gray-300 rounded-md px-3 py-2 text-sm z-10">
               <button
-                onClick={() => remove(item.id)}
+                onClick={() => mutate(item.id)}
+                disabled={isPending}
                 className="flex gap-2 items-center cursor-pointer py-2 px-2 w-full rounded-md hover:bg-red-100 transition-colors duration-200"
               >
                 <Trash2Icon className="text-red-600 w-4 h-4" />
                 <span className="text-red-700 font-medium">
-                  Delete Customer
+                  {isPending ? "Deleting" : "  Delete Customer"}
                 </span>
               </button>
             </div>

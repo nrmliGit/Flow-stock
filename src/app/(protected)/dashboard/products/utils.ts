@@ -6,33 +6,61 @@ import toast from "react-hot-toast";
 export function addProduct(formEvent: FormEvent<HTMLFormElement>) {
   formEvent.preventDefault();
   const formData = new FormData(formEvent.currentTarget);
-  const response = httpClient
+  return httpClient
     .postForm("/api/product/add", {
       size: formData.get("size"),
       pieceNumber: formData.get("pieceNumber"),
       thumbnail: formData.get("thumbnail"),
       price: parseFloat(formData.get("price")?.toString() ?? ""),
-      productModelId: Number(formData.get("models")),
+      productModelId: Number(formData.get("productModelId")),
       blockNumber: formData.get("blockNumber"),
-      colorId: Number(formData.get("colors")),
+      colorId: Number(formData.get("colorId")),
       stock: formData.get("stock"),
     })
     .then((res) => {
       if (res.status === 201) toast.success("Product added Successfully");
+      return res.data;
     })
     .catch((e) => {
       if (axios.isAxiosError(e)) toast.error(e.response?.data);
       else {
-        //  toast.error("Something went wrong");
+        toast.error("Something went wrong");
         console.error("Unknown Error:", e);
       }
     });
-
-  return "ok";
 }
 
-export function softDeleteProduct(id: number) {
-  const response = httpClient.delete(`/api/product/softdelete/${id}`);
+// export function addProduct(formEvent: FormEvent<HTMLFormElement>) {
+//   formEvent.preventDefault();
+//   const formData = new FormData(formEvent.currentTarget);
+//   const response = httpClient
+//     .postForm("/api/product/add", {
+//       size: formData.get("size"),
+//       pieceNumber: formData.get("pieceNumber"),
+//       thumbnail: formData.get("thumbnail"),
+//       price: parseFloat(formData.get("price")?.toString() ?? ""),
+//       productModelId: Number(formData.get("models")),
+//       blockNumber: formData.get("blockNumber"),
+//       colorId: Number(formData.get("colors")),
+//       stock: formData.get("stock"),
+//     })
+//     .then((res) => {
+//       if (res.status === 201) toast.success("Product added Successfully");
+//     })
+//     .catch((e) => {
+//       if (axios.isAxiosError(e)) toast.error(e.response?.data);
+//       else {
+//         toast.error("Something went wrong");
+//         console.error("Unknown Error:", e);
+//       }
+//     });
+
+//   return "ok";
+// }
+
+export async function softDeleteProduct(id: number) {
+  const res = await httpClient.delete(`/api/product/softdelete/${id}`);
+  return res.data;
 }
 
 export function updateProduct(

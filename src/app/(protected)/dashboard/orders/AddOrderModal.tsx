@@ -33,14 +33,14 @@ export default function AddOrderModal({
     mutationFn: async () => {
       if (selectedProducts.length === 0 && !selectedCustomer) return;
 
-      const response = await httpClient
+      await httpClient
         .post("http://localhost:5000/api/orders/add", {
           customerId: selectedCustomer?.id,
           productItems: selectedProducts.map((p) => ({
             id: p.id,
-            quantity: 1,
+            quantity: p.quantity,
             price: p.price,
-            unit: 2,
+            unit: p.unit,
           })),
         })
         .then((res) => {
