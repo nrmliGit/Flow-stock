@@ -14,7 +14,7 @@ export default function ProductColors() {
 
   return (
     <div className="border-2 border-gray-200 mb-4 mt-2 p-2 rounded-md ">
-      <select name="colors" id="colors">
+      <select name="colorId" id="colorId">
         {colors.map((color: { id: number; name: string }, index: number) => (
           <option key={index} value={color.id}>
             {color.name}

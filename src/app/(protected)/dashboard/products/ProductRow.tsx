@@ -4,10 +4,11 @@ import { ProductJoin } from "@/types/product.types";
 import { EyeIcon, Trash2Icon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { softDeleteProduct } from "./utils";
+import { getColorName, softDeleteProduct } from "./utils";
 import ProductDetailModal from "./ProductDetailModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { handleApiError } from "@/lib/utils";
 
 export default function ProductRow({ item }: { item: ProductJoin }) {
   const [isOpenRow, setIsOpenRow] = useState(false);
@@ -17,14 +18,14 @@ export default function ProductRow({ item }: { item: ProductJoin }) {
 
   const queryClient = useQueryClient();
 
-  const deleteMutation = useMutation({
-    mutationFn: (id: number) => softDeleteProduct(id),
+  const { mutate: deleteMutation, isPending } = useMutation({
+    mutationFn: softDeleteProduct,
     onSuccess: () => {
       toast.success("Product deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["product"] });
     },
-    onError: () => {
-      toast.error("Failed to delete product");
+    onError: (err) => {
+      handleApiError(err);
     },
   });
 
@@ -72,7 +73,7 @@ export default function ProductRow({ item }: { item: ProductJoin }) {
       </td>
       <td className="p-3 text-gray-800">{item.blockNumber}</td>
       <td className="p-3 text-gray-800">{item.pieceNumber}</td>
-      <td className="p-3 text-gray-800">{item.product_color_name}</td>
+      <td className="p-3 text-gray-800">{getColorName(item.colorId)}</td>
       <td className="p-3 text-center">
         <div ref={dropdownRef} className="relative inline-block">
           <button
@@ -93,13 +94,13 @@ export default function ProductRow({ item }: { item: ProductJoin }) {
               </button>
 
               <button
-                onClick={() => deleteMutation.mutate(item.id)}
-                disabled={deleteMutation.isPending}
+                onClick={() => deleteMutation(item.id)}
+                disabled={isPending}
                 className="flex gap-2 items-center text-red-600 cursor-pointer py-2 px-2 w-full rounded-md hover:bg-red-100 transition-colors duration-200 mt-1"
               >
                 <Trash2Icon className="w-4 h-4" />
                 <span className="font-medium">
-                  {deleteMutation.isPending ? "Deleting" : "  Delete Product"}
+                  {isPending ? "Deleting" : "  Delete Product"}
                 </span>
               </button>
             </div>

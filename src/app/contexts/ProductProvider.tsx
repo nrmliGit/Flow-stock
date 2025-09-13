@@ -44,7 +44,7 @@ export default function ProductProvider({ children }: PropsWithChildren) {
     queryKey: ["product"],
     queryFn: async () => {
       try {
-        const res = await httpClient.get("/api/product");
+        const res = await httpClient.get("/api/product?filter=is_deleted");
         return res.data;
       } catch (error) {
         console.log("Failed to load products:", error);

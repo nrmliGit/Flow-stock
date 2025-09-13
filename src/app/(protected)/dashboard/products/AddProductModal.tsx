@@ -44,7 +44,8 @@ export default function AddProductModal({
             onSubmit={(e) => {
               // if (addProduct(e) === "ok") onClose(false);
               e.preventDefault();
-              mutate(e);
+              const formData = new FormData(e.currentTarget);
+              mutate(formData);
             }}
             className="bg-white border border-blue-300 py-6 px-5 rounded-md"
           >

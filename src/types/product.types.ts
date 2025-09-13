@@ -14,6 +14,24 @@ export type Product = {
   stock: number;
 };
 
+export type ProductJoinStockStringDto = {
+  id: number;
+  size: string;
+  thumbnail: string;
+  price: number;
+  productModelId: number;
+  blockNumber: number;
+  pieceNumber: number;
+  colorId: number;
+  categoryId: number;
+  userId: string;
+  stock: string;
+  created_at: Date;
+  updated_at: Date;
+  product_model_name: string;
+  product_color_name: string;
+};
+
 export type ProductJoin = {
   id: number;
   size: string;

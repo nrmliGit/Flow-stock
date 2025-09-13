@@ -1,13 +1,11 @@
 import httpClient from "@/lib/axios";
-import axios from "axios";
+import { handleApiError } from "@/lib/utils";
 import { FormEvent } from "react";
 import toast from "react-hot-toast";
 
-export function addProduct(formEvent: FormEvent<HTMLFormElement>) {
-  formEvent.preventDefault();
-  const formData = new FormData(formEvent.currentTarget);
-  return httpClient
-    .postForm("/api/product/add", {
+export async function addProduct(formData: FormData) {
+  try {
+    const res = await httpClient.postForm("/api/product/add", {
       size: formData.get("size"),
       pieceNumber: formData.get("pieceNumber"),
       thumbnail: formData.get("thumbnail"),
@@ -16,51 +14,23 @@ export function addProduct(formEvent: FormEvent<HTMLFormElement>) {
       blockNumber: formData.get("blockNumber"),
       colorId: Number(formData.get("colorId")),
       stock: formData.get("stock"),
-    })
-    .then((res) => {
-      if (res.status === 201) toast.success("Product added Successfully");
-      return res.data;
-    })
-    .catch((e) => {
-      if (axios.isAxiosError(e)) toast.error(e.response?.data);
-      else {
-        toast.error("Something went wrong");
-        console.error("Unknown Error:", e);
-      }
     });
+
+    if (res.status === 201) toast.success("Product added successfully");
+    return res.data;
+  } catch (e) {
+    handleApiError(e);
+    throw e;
+  }
 }
 
-// export function addProduct(formEvent: FormEvent<HTMLFormElement>) {
-//   formEvent.preventDefault();
-//   const formData = new FormData(formEvent.currentTarget);
-//   const response = httpClient
-//     .postForm("/api/product/add", {
-//       size: formData.get("size"),
-//       pieceNumber: formData.get("pieceNumber"),
-//       thumbnail: formData.get("thumbnail"),
-//       price: parseFloat(formData.get("price")?.toString() ?? ""),
-//       productModelId: Number(formData.get("models")),
-//       blockNumber: formData.get("blockNumber"),
-//       colorId: Number(formData.get("colors")),
-//       stock: formData.get("stock"),
-//     })
-//     .then((res) => {
-//       if (res.status === 201) toast.success("Product added Successfully");
-//     })
-//     .catch((e) => {
-//       if (axios.isAxiosError(e)) toast.error(e.response?.data);
-//       else {
-//         toast.error("Something went wrong");
-//         console.error("Unknown Error:", e);
-//       }
-//     });
-
-//   return "ok";
-// }
-
 export async function softDeleteProduct(id: number) {
-  const res = await httpClient.delete(`/api/product/softdelete/${id}`);
-  return res.data;
+  try {
+    const res = await httpClient.delete(`/api/product/softdelete/${id}`);
+    return res.data;
+  } catch (e) {
+    throw e;
+  }
 }
 
 export function updateProduct(
@@ -104,12 +74,16 @@ export function updateProduct(
       if (res.status === 200) toast.success(res.data);
     })
     .catch((e) => {
-      if (axios.isAxiosError(e)) toast.error(e.response?.data);
-      else {
-        //toast.error("Something went wrong");
-        console.error("Unknown Error:", e);
-      }
+      handleApiError(e);
+      throw e;
     });
 
   return "ok";
 }
+
+export const getColorName = (colorId: number) => {
+  if (colorId === 1) return "BK";
+  if (colorId === 2) return "Golden";
+  if (colorId === 3) return "White";
+  return "Unknown";
+};
