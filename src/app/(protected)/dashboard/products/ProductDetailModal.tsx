@@ -45,7 +45,7 @@ export default function ProductDetailModal({
                   }}
                   type="text"
                   name="size"
-                  placeholder={item.size}
+                  defaultValue={item.size}
                   className="p-2 w-full"
                 />
               </div>
@@ -60,7 +60,7 @@ export default function ProductDetailModal({
                   }}
                   type="text"
                   name="thumbnail"
-                  placeholder={item.thumbnail}
+                  defaultValue={item.thumbnail}
                   className="p-2 w-full"
                 />
               </div>
@@ -75,7 +75,7 @@ export default function ProductDetailModal({
                   }}
                   type="number"
                   name="price"
-                  placeholder={String(item.price)}
+                  defaultValue={String(item.price)}
                   className="p-2 w-full"
                 />
               </div>
@@ -90,7 +90,7 @@ export default function ProductDetailModal({
                   }}
                   type="number"
                   name="pieceNumber"
-                  placeholder={String(item.pieceNumber)}
+                  defaultValue={String(item.pieceNumber)}
                   className="p-2 w-full"
                 />
               </div>
@@ -105,7 +105,7 @@ export default function ProductDetailModal({
                   }}
                   type="number"
                   name="stock"
-                  placeholder={String(item.stock)}
+                  defaultValue={String(item.stock)}
                   className="p-2 w-full"
                 />
               </div>
@@ -120,7 +120,7 @@ export default function ProductDetailModal({
                   }}
                   type="number"
                   name="blockNumber"
-                  placeholder={String(item.blockNumber)}
+                  defaultValue={String(item.blockNumber)}
                   className="p-2 w-full"
                 />
               </div>
@@ -139,4 +139,3 @@ export default function ProductDetailModal({
     </div>
   );
 }
-

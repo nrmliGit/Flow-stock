@@ -39,34 +39,18 @@ export function updateProduct(
 ) {
   formEvent.preventDefault();
   const formData = new FormData(formEvent.currentTarget);
+
   const obj = {
     id,
-    size:
-      formData.get("size") !== ""
-        ? formData.get("size")
-        : formEvent.currentTarget.size.placeholder,
-    pieceNumber:
-      formData.get("pieceNumber") !== ""
-        ? formData.get("pieceNumber")
-        : formEvent.currentTarget.pieceNumber.placeholder,
-    thumbnail:
-      formData.get("thumbnail") !== ""
-        ? formData.get("thumbnail")
-        : formEvent.currentTarget.thumbnail.placeholder,
-    price: parseFloat(
-      formData.get("price") !== ""
-        ? formData.get("price")
-        : formEvent.currentTarget.price.placeholder
-    ),
-    blockNumber:
-      formData.get("blockNumber") !== ""
-        ? formData.get("blockNumber")
-        : formEvent.currentTarget.blockNumber.placeholder,
-    stock:
-      formData.get("stock") !== ""
-        ? formData.get("stock")
-        : formEvent.currentTarget.stock.placeholder,
+    size: formData.get("size") as string,
+    thumbnail: formData.get("thumbnail") as string,
+    price: parseFloat(formData.get("price") as string),
+    pieceNumber: Number(formData.get("pieceNumber")),
+    stock: Number(formData.get("stock")),
+    blockNumber: Number(formData.get("blockNumber")),
   };
+
+  console.log("PATCH göndərilən obyekt:", obj);
 
   httpClient
     .patch("/api/product/update/", obj)
